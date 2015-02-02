@@ -21,6 +21,15 @@ language processing, machine learning, network analysis and
 visualization.
 http://www.clips.ua.ac.be/pages/pattern
 
+https://github.com/wbolster/happybase
+A developer-friendly Python library to interact with Apache HBase 
+http://happybase.readthedocs.org/
+
+https://github.com/wrobstory/vincent
+A Python to Vega translator. Charts in Python
+https://vincent.readthedocs.org/en/latest/quickstart.html#quick-data
+
+
 
 Financial
 ---------
@@ -47,6 +56,9 @@ http://useiconic.com/open
 https://github.com/jorgebastida/glue
 Glue is a simple command line tool to generate CSS sprites
 http://glue.readthedocs.org
+
+Graphs
+------
 
 
 ? Modules ?
