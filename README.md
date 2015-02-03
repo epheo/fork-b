@@ -36,6 +36,9 @@ Financial
 https://github.com/quantopian/zipline
 Zipline, a Pythonic Algorithmic Trading Library 
 
+https://developer.yahoo.com/finance/company.html
+Yahoo! finance API, RSS news
+http://finance.yahoo.com/rss/headline?s=yhoo
 
 Web
 ---
