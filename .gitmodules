@@ -1,3 +1,0 @@
-[submodule "frontend/haproxy"]
-	path = frontend/haproxy
-	url = https://github.com/dockerfile/haproxy.git

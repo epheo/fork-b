@@ -1,0 +1,19 @@
+############################
+## Fork-B Stocks Keywords ##
+############################
+
+hpq: 
+- hpq
+- 'hewlett packard'
+- '#hp'
+- hp
+
+tsla:
+  - tesla
+  - 'eon musk'
+
+yhoo:
+  - yahoo
+
+rht:
+  - 'red hat'
