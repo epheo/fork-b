@@ -4,21 +4,56 @@ from textwrap import TextWrapper
 from textblob import TextBlob
 from datetime import datetime
 from elasticsearch import Elasticsearch
+from yaml import load
 
 
-consumer_key="Your_consumer_key_here"
-consumer_secret="Your_consumer_secret_here"
+class TwitterCrawler(object):
 
-access_token="Your_access_token_here"
-access_token_secret="Your_access_token_secret_here"
+    def __init__(self, name):
+        self.name = name
+        self.keywords = ConfigFile.keywords(self.name)
+        self.config_path = '.'
 
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
+    def connect(self):
+        config_dic = open('%s/keywords.yml' % self.config_path, "r")
+        config_dic = config_dic.read()
+        config_dic = yaml.load(config_dic)
+        self.keywords = config_dic.get('twitter_auth')
+        consumer_key = config_dic.get(self.name)
+        consumer_secret = config_dic.get(self.name)
 
-es = Elasticsearch()
+        access_token = config_dic.get(self.name)
+        access_token_secret = config_dic.get(self.name)
+
+        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        auth.set_access_token(access_token, access_token_secret)
+
+        return auth
+
+    def crawl(self):
+        auth = self.connect()
+        streamer = tweepy.Stream(auth=auth, 
+                                 listener=StreamListener(), 
+                                 timeout=300000000 )
+        streamer.filter(None,self.keywords)
+
+
+class ConfigFile(object):
+
+    def __init__(self, name):
+        self.name = name
+        self.config_path = '.'
+        config_dic = open('%s/keywords.yml' % self.config_path, "r")
+        config_dic = config_dic.read()
+        config_dic = yaml.load(config_dic)
+        self.keywords = config_dic.get(self.name)
+
 
 class StreamListener(tweepy.StreamListener):
-    status_wrapper = TextWrapper(width=60, initial_indent='    ', subsequent_indent='    ')
+
+    def __init__(self):
+        status_wrapper = TextWrapper(width=60, initial_indent='    ', subsequent_indent='    ')
+        es = Elasticsearch()
 
     def on_status(self, status):
         try:
@@ -27,8 +62,8 @@ class StreamListener(tweepy.StreamListener):
 
             tweet = TextBlob(status.text)
 
-            es.create(index="my-index", 
-                      doc_type="test-type", 
+            es.create(index="hpq", 
+                      doc_type="tweet", 
                       body={ "author": status.author.screen_name,
                              "date": status.created_at,
                              "message": status.text,
@@ -39,11 +74,4 @@ class StreamListener(tweepy.StreamListener):
 
         except Exception, e:
             pass
-
-streamer = tweepy.Stream(auth=auth, listener=StreamListener(), timeout=3000000000 )
-
-#Fill with your own Keywords bellow
-terms = ['intel','#edison', '#galileo']
-
-streamer.filter(None,terms)
 
