@@ -1,4 +1,4 @@
-import sys, httplib, urllib
+import httplib, urllib
 
 try: import simplejson as json
 except ImportError: import json
@@ -13,7 +13,6 @@ FINANCE_TABLES = {'quotes': 'yahoo.finance.quotes',
                  'sectors': 'yahoo.finance.sectors',
                  'industry': 'yahoo.finance.industry'}
 
-# http://www.gurchet-rai.net/dev/yahoo-finance-yql
 
 def executeYQLQuery(yql):
 	conn = httplib.HTTPConnection('query.yahooapis.com')
@@ -57,8 +56,7 @@ def __validate_response(response, tagToCheck):
 
 
 def get_current_info(symbolList, columnsToRetrieve='*'):
-	"""Retrieves the latest data (15 minute delay) for the 
-	provided symbols."""
+	"""(15 minute delay)"""
 	
 	columns = ','.join(columnsToRetrieve)
 	symbols = __format_symbol_list(symbolList)
@@ -71,10 +69,6 @@ def get_current_info(symbolList, columnsToRetrieve='*'):
 
 
 def get_historical_info(symbol):
-	"""Retrieves historical stock data for the provided symbol.
-	Historical data includes date, open, close, high, low, volume,
-	and adjusted close."""
-	
 	yql = 'select * from csv where url=\'%s\'' \
 		  ' and columns=\"Date,Open,High,Low,Close,Volume,AdjClose\"' \
 		   % (HISTORICAL_URL + symbol)
@@ -86,8 +80,6 @@ def get_historical_info(symbol):
 
 
 def get_news_feed(symbol):
-	"""Retrieves the rss feed for the provided symbol."""
-	
 	feedUrl = RSS_URL + symbol
 	yql = 'select title, link, description, pubDate from rss where url=\'%s\'' % feedUrl
 	response = executeYQLQuery(yql)
@@ -96,12 +88,8 @@ def get_news_feed(symbol):
 	else:
 		return response['query']['results']['item']
 
-	""" (pubDate LIKE '%10 Oct 2010%') """
-
 	
 def get_options_info(symbol, expiration='', columnsToRetrieve ='*'):
-	"""Retrieves options data for the provided symbol."""
-	
 	columns = ','.join(columnsToRetrieve)
 	yql = 'select %s from %s where symbol = \'%s\'' \
 		  % (columns, FINANCE_TABLES['options'], symbol)
@@ -124,8 +112,6 @@ def get_index_summary(index, columnsToRetrieve='*'):
 
 
 def get_industry_ids():
-	"""retrieves all industry names and ids."""
-	
 	yql = 'select * from %s' % FINANCE_TABLES['sectors']
 	response = executeYQLQuery(yql)
 	return __validate_response(response, 'sector')
@@ -133,8 +119,6 @@ def get_industry_ids():
 
 
 def get_industry_index(id):
-	"""retrieves all symbols that belong to an industry."""
-	
 	yql = 'select * from %s where id =\'%s\'' \
 		  % (FINANCE_TABLES['industry'], id)
 	response = executeYQLQuery(yql)
