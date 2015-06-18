@@ -43,13 +43,13 @@ angular.module('starter.controllers', [])
 
 .controller('StocksCtrl', function($scope) {
   $scope.stocks = [
-    { title: 'HPQ (NYSE)', id: 1 },
-    { title: 'YHOO (NASD)', id: 2 },
-    { title: 'LNKD (NYSE)', id: 3 },
-    { title: 'TWTR (NYSE)', id: 4 },
-    { title: 'RHT (NYSE)', id: 5 },
-    { title: 'AMZN (NASD)', id: 6 },
-    { title: 'FB (NASD)', id: 7 }
+    { title: 'HPQ (NYSE)', id: 'hpq' },
+    { title: 'YHOO (NASD)', id: 'yhoo' },
+    { title: 'LNKD (NYSE)', id: 'lnkd' },
+    { title: 'TWTR (NYSE)', id: 'twtr' },
+    { title: 'RHT (NYSE)', id: 'rht' },
+    { title: 'AMZN (NASD)', id: 'amzn' },
+    { title: 'FB (NASD)', id: 'fb' }
   ];
 })
 
@@ -78,6 +78,24 @@ angular.module('starter.controllers', [])
         return chart;
     });
 
+    function csv_to_json(csv){
+      var lines=csv.split("\n");
+      var result = [];
+      var headers=lines[0].split(",");
+
+      for(var i=1;i<lines.length;i++){
+          var obj = {};
+          var currentline=lines[i].split(",");
+          for(var j=0;j<headers.length;j++){
+              obj[headers[j]] = currentline[j];
+          }
+          result.push(obj);
+      }
+
+      return JSON.stringify(result);
+    }
+
+
     function testData() {
         return stream_layers(3,128,.1).map(function(data, i) {
             return {
@@ -86,5 +104,33 @@ angular.module('starter.controllers', [])
                 values: data
             };
         });
+    }
+
+    function retrieveData(symbol) {
+      var historicalQuotation = 'http://ichart.finance.yahoo.com/table.csv?s=';
+
+      return request.get(historicalQuotation.concat(symbol));
+
+    }
+
+    function parseData(symbol) {
+      var csv_data = retrieveData(symbol);
+      var json_data = csv_to_json(csv_data);
+      console.log(json_data)
+      return json_data
+    }
+
+    function returnData() {
+      return [
+          {
+              values: partner1,
+              key: "Partner 1",
+              color: "#ff7f0e"
+          },
+          {
+              values: partner2,
+              key: "Partner 2",
+              color: "#2ca02c"
+          }];
     }
 });

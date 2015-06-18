@@ -31,4 +31,3 @@ class Quotation(object):
     def store_quote(self):
         pass
 
-    
