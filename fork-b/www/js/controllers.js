@@ -53,7 +53,7 @@ angular.module('starter.controllers', [])
   ];
 })
 
-.controller('StockCtrl', function($scope, $stateParams) {
+.controller('StockCtrl', function($scope, $stateParams, $http) {
     nv.addGraph(function() {
         var chart = nv.models.lineWithFocusChart();
         var width = 550;
@@ -109,7 +109,7 @@ angular.module('starter.controllers', [])
     function retrieveData(symbol) {
       var historicalQuotation = 'http://ichart.finance.yahoo.com/table.csv?s=';
 
-      return request.get(historicalQuotation.concat(symbol));
+      return $http.get(historicalQuotation.concat(symbol));
 
     }
 
