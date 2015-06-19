@@ -111,10 +111,10 @@ angular.module('starter.controllers', [])
     }
 
     function retrieveData(symbol) {
-      //var historicalQuotation = 'http://b2o.epheo.eu/fork-b/';
-      var proxyhistoricalQuotation = 'http://localhost:8100/fake_api/';
+      var historicalQuotation = 'http://b2o.epheo.eu/fork-b/q/';
+      //var proxyhistoricalQuotation = 'http://localhost:8100/fake_api/';
 
-      return $http.get(proxyhistoricalQuotation.concat(symbol));
+      return $http.get(historicalQuotation.concat(symbol));
 
     }
 

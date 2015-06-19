@@ -21,14 +21,15 @@ import csv
 import requests
 import json 
 
+
 class Quotation(object):
-    def __init__(self, symbol):
-        db_path = './%s' % symbol
+    def __init__(self, symbol='hpq', path='/srv/http/fork-b/q'):
+        db_path = '%s/%s' % path, symbol
         self.symbol = symbol
         self.db = TinyDictDb(path=db_path, rMode='hybrid', wMode='append')
 
-
     def store_quote(self):
-    	json_data = yahooyql.get_historical_info(self.symbol)
+        json_data = yahooyql.get_historical_info(self.symbol)
+
         self.db.addEntries(json_data)
 
