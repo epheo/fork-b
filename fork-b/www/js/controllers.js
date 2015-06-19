@@ -51,9 +51,13 @@ angular.module('starter.controllers', [])
     { title: 'AMZN (NASD)', id: 'amzn' },
     { title: 'FB (NASD)', id: 'fb' }
   ];
+
+  $scope.quotes = { value: '34', id: 'hpq' };
 })
 
 .controller('StockCtrl', function($scope, $stateParams, $http) {
+    $scope.quotes = { value: '34', id: 'hpq' };
+
     nv.addGraph(function() {
         var chart = nv.models.lineWithFocusChart();
         var width = 550;
@@ -107,9 +111,10 @@ angular.module('starter.controllers', [])
     }
 
     function retrieveData(symbol) {
-      var historicalQuotation = 'http://ichart.finance.yahoo.com/table.csv?s=';
+      //var historicalQuotation = 'http://b2o.epheo.eu/fork-b/';
+      var proxyhistoricalQuotation = 'http://localhost:8100/fake_api/';
 
-      return $http.get(historicalQuotation.concat(symbol));
+      return $http.get(proxyhistoricalQuotation.concat(symbol));
 
     }
 
@@ -133,4 +138,11 @@ angular.module('starter.controllers', [])
               color: "#2ca02c"
           }];
     }
-});
+
+    //$scope.jsondata = parseData('hpq');
+
+    $scope.foo = [
+    { foobar: 'bar', id: 'plop' },
+    { moi: 'jm', manger: 'leschips' }
+  ];
+})

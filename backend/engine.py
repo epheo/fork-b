@@ -17,17 +17,18 @@
 
 from tinydictdb import TinyDictDb
 import yahooyql
-
+import csv
+import requests
+import json 
 
 class Quotation(object):
     def __init__(self, symbol):
-        db_path = './stocks/%s' % symbol
+        db_path = './%s' % symbol
         self.symbol = symbol
         self.db = TinyDictDb(path=db_path, rMode='hybrid', wMode='append')
 
-    def retrieve_quote(self):
-        pass
 
     def store_quote(self):
-        pass
+    	json_data = yahooyql.get_historical_info(self.symbol)
+        self.db.addEntries(json_data)
 
